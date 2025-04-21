@@ -106,6 +106,16 @@ def place_order(book_id_entry, quantity_entry, customer_entry, payment_option_va
             messagebox.showerror("Error", "Customer name cannot be empty")
             return
 
+        # Optional: Check if book ID exists
+        if book_id not in inventory:
+            messagebox.showerror("Error", "Invalid Book ID")
+            return
+
+        # Optional: Check stock availability
+        if quantity > inventory[book_id]["quantity"]:
+            messagebox.showerror("Error", "Insufficient stock available")
+            return
+
         payload = {
             "book_id": book_id,
             "quantity": quantity,
@@ -121,6 +131,8 @@ def place_order(book_id_entry, quantity_entry, customer_entry, payment_option_va
                 messagebox.showerror("Order Failed", res_json["error"])
             else:
                 messagebox.showinfo("Order Placed", res_json["message"])
+
+                inventory[book_id]["quantity"] -= quantity
 
                 order_status = {
                     "book_id": book_id,
