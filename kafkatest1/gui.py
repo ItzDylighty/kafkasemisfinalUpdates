@@ -136,12 +136,12 @@ def place_order(book_id_entry, quantity_entry, customer_entry, payment_option_va
                     "book_id": book_id,
                     "book": inventory[book_id]["name"],
                     "quantity": quantity,
-                    "status": "Pending",
+                    "status": "Available" if "message" in res_json and "placed" in res_json["message"].lower() else "Out of Stock",
                     "customer": customer,
                     "payment_option": payment_option,
                     "message": res_json["message"]
                 }
-
+                
                 order_history.append(order_status)
                 shipped_orders.append(order_status)
                 update_inventory_display()
